@@ -10,9 +10,16 @@ const highlighter = await shiki.getHighlighter({ theme: 'poimandres' })
 const processor = remark().use(withShiki, { highlighter })
 `
 
+const MISSING_THEME = `Please provide a theme name to the highlighter.`
+
 export default function attacher(options = {}) {
   const highlighter = options.highlighter
   const parseMeta = options.parseMeta || parseMetaDefault
+  const theme = options.theme
+
+  if (!theme) {
+    throw new Error(MISSING_THEME)
+  }
 
   if (!highlighter) {
     throw new Error(MISSING_HIGHLIGHTER)
@@ -38,6 +45,7 @@ export default function attacher(options = {}) {
       const highlighted = highlighter.codeToHtml(node.value, {
         lang,
         lineOptions,
+        theme,
       })
 
       node.type = 'html'
@@ -63,3 +71,5 @@ function parseMetaDefault(meta) {
     return undefined
   }
 }
+
+export const remarkShiki = () => attacher

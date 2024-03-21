@@ -10,6 +10,7 @@ export interface Options {
   ) => HtmlRendererOptions['lineOptions']
   /** @default true */
   ignoreUnknownLanguage?: boolean
+  theme: string
 }
 
 declare const withShiki: Plugin<[Options]>
